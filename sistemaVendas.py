@@ -31,3 +31,27 @@ CREATE TABLE IF NOT EXISTS vendas(
 )
 """)
 conexao.commit()
+
+#Funcionalidade: funções de atualização de tabelas de produtos e vendas
+def atualizar_produtos():
+    tabela_produtos.delete(*tabela_produtos.get_children())
+    cursor.execute("SELECT * FROM produtos")
+    dados = cursor.fetchall()
+    for linha in dados:
+        tabela_produtos.insert("", tk.END, values=linha)
+    carregar_combobox()
+
+def atualizar_vendas():
+    tabela_vendas.delete(*tabela_vendas.get_children())
+    cursor.execute("SELECT * FROM vendas")
+    dados = cursor.fetchall()
+    for linha in dados:
+        tabela_vendas.insert("", tk.END, values=linha)
+
+def carregar_combobox():
+    cursor.execute("SELECT nome FROM produtos")
+    produtos = cursor.fetchall()
+    lista = []
+    for produto in produtos:
+        lista.append(produto[0])
+    combo_produto["values"] = lista
