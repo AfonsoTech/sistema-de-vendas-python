@@ -119,3 +119,52 @@ def registrar_venda():
         entry_quantidade.delete(0, tk.END)
     except:
         messagebox.showerror("Erro", "Digite uma quantidade válida")
+
+#Características: estatísticas, relatório e gráfico do Pandas
+def atualizar_estatisticas():
+    cursor.execute("SELECT total FROM vendas")
+    dados = cursor.fetchall()
+    if len(dados) == 0:
+        label_estatisticas.config(text="Nenhuma venda registrada")
+        return
+    valores = np.array([item[0] for item in dados])
+    soma = np.sum(valores)
+    media = np.mean(valores)
+    maior = np.max(valores)
+    menor = np.min(valores)
+    texto = f"""
+Total Vendido: R$ {soma:.2f}
+Média das Vendas: R$ {media:.2f}
+Maior Venda: R$ {maior:.2f}
+Menor Venda: R$ {menor:.2f}
+Quantidade de Vendas: {len(valores)}
+"""
+    label_estatisticas.config(text=texto)
+
+def relatorio_pandas():
+    df = pd.read_sql_query("SELECT * FROM vendas", conexao)
+    if df.empty:
+        messagebox.showwarning("Aviso", "Nenhuma venda cadastrada")
+        return
+    resumo = df.groupby("produto")["total"].sum()
+    print("\nRELATÓRIO DE VENDAS\n")
+    print(resumo)
+    messagebox.showinfo("Relatório", "Relatório gerado no terminal")
+
+def gerar_grafico():
+    df = pd.read_sql_query("SELECT * FROM vendas", conexao)
+    if df.empty:
+        messagebox.showwarning("Aviso", "Nenhuma venda cadastrada")
+        return
+    agrupado = df.groupby("produto")["total"].sum()
+    janela_grafico = tk.Toplevel()
+    janela_grafico.title("Gráfico de Vendas")
+    janela_grafico.geometry("700x500")
+    figura, ax = plt.subplots(figsize=(7, 5))
+    agrupado.plot(kind="bar", ax=ax)
+    ax.set_title("Vendas por Produto")
+    ax.set_xlabel("Produtos")
+    ax.set_ylabel("Valor Total")
+    canvas = FigureCanvasTkAgg(figura, master=janela_grafico)
+    canvas.draw()
+    canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
