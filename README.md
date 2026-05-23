@@ -20,3 +20,6 @@ python sistema_vendas.py
 - Estatísticas em tempo real
 - Relatório via Pandas
 - Gráfico de vendas por produto
+
+<img width="1515" height="910" alt="image" src="https://github.com/user-attachments/assets/18a9ea5f-1121-4166-918c-8af8ca37a006" />
+
