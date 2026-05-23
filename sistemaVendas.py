@@ -286,3 +286,18 @@ label_estatisticas = tk.Label(
     justify="left"
 )
 label_estatisticas.pack(anchor="w", padx=10, pady=10)
+
+#tarefa: inicialização do aplicativo e loop principal
+
+# ==========================================
+# INICIALIZAÇÃO
+# ==========================================
+atualizar_produtos()
+atualizar_vendas()
+atualizar_estatisticas()
+janela.mainloop()
+    
+atualizar_produtos()
+atualizar_vendas()
+atualizar_estatisticas()
+janela.mainloop()
