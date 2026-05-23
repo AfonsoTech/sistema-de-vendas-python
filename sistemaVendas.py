@@ -79,3 +79,43 @@ def cadastrar_produto():
         atualizar_produtos()
     except:
         messagebox.showerror("Erro", "Digite valores válidos")
+
+#Funcionalidade: adicionar lógica de registro de vendas
+def registrar_venda():
+    produto = combo_produto.get()
+    quantidade = entry_quantidade.get()
+    if produto == "" or quantidade == "":
+        messagebox.showerror("Erro", "Preencha os campos")
+        return
+    try:
+        quantidade = int(quantidade)
+        cursor.execute("""
+            SELECT preco, estoque FROM produtos WHERE nome = ?
+        """, (produto,))
+        resultado = cursor.fetchone()
+        if resultado is None:
+            messagebox.showerror("Erro", "Produto não encontrado")
+            return
+        preco = resultado[0]
+        estoque = resultado[1]
+        if quantidade > estoque:
+            messagebox.showerror("Erro", "Estoque insuficiente")
+            return
+        total = preco * quantidade
+        data = datetime.now().strftime("%d/%m/%Y %H:%M")
+        cursor.execute("""
+            INSERT INTO vendas(produto, quantidade, preco, total, data)
+            VALUES (?, ?, ?, ?, ?)
+        """, (produto, quantidade, preco, total, data))
+        novo_estoque = estoque - quantidade
+        cursor.execute("""
+            UPDATE produtos SET estoque = ? WHERE nome = ?
+        """, (novo_estoque, produto))
+        conexao.commit()
+        messagebox.showinfo("Sucesso", "Venda registrada")
+        atualizar_produtos()
+        atualizar_vendas()
+        atualizar_estatisticas()
+        entry_quantidade.delete(0, tk.END)
+    except:
+        messagebox.showerror("Erro", "Digite uma quantidade válida")
