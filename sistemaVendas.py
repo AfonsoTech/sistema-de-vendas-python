@@ -168,3 +168,121 @@ def gerar_grafico():
     canvas = FigureCanvasTkAgg(figura, master=janela_grafico)
     canvas.draw()
     canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+    
+#Funcionalidade: construir a janela principal e o layout da interface do usuário.
+
+# ==========================================
+# JANELA
+# ==========================================
+janela = tk.Tk()
+janela.title("Sistema de Vendas")
+janela.geometry("1200x700")
+
+# ==========================================
+# CADASTRO PRODUTOS
+# ==========================================
+frame1 = tk.LabelFrame(janela, text="Cadastro de Produtos")
+frame1.place(x=10, y=10, width=350, height=250)
+
+tk.Label(frame1, text="Nome").pack()
+entry_nome = tk.Entry(frame1, width=30)
+entry_nome.pack()
+
+tk.Label(frame1, text="Preço").pack()
+entry_preco = tk.Entry(frame1, width=30)
+entry_preco.pack()
+
+tk.Label(frame1, text="Estoque").pack()
+entry_estoque = tk.Entry(frame1, width=30)
+entry_estoque.pack()
+
+tk.Button(
+    frame1,
+    text="Cadastrar Produto",
+    command=cadastrar_produto,
+    bg="green",
+    fg="white"
+).pack(pady=10)
+
+# ==========================================
+# VENDAS
+# ==========================================
+frame2 = tk.LabelFrame(janela, text="Registro de Vendas")
+frame2.place(x=10, y=280, width=350, height=250)
+
+tk.Label(frame2, text="Produto").pack()
+combo_produto = ttk.Combobox(frame2, width=27)
+combo_produto.pack()
+
+tk.Label(frame2, text="Quantidade").pack()
+entry_quantidade = tk.Entry(frame2, width=30)
+entry_quantidade.pack()
+
+tk.Button(
+    frame2,
+    text="Registrar Venda",
+    command=registrar_venda,
+    bg="blue",
+    fg="white"
+).pack(pady=10)
+
+tk.Button(
+    frame2,
+    text="Relatório Pandas",
+    command=relatorio_pandas,
+    bg="orange"
+).pack(pady=5)
+
+tk.Button(
+    frame2,
+    text="Gerar Gráfico",
+    command=gerar_grafico,
+    bg="purple",
+    fg="white"
+).pack(pady=5)
+
+# ==========================================
+# TABELA PRODUTOS
+# ==========================================
+frame3 = tk.LabelFrame(janela, text="Produtos")
+frame3.place(x=380, y=10, width=800, height=250)
+
+colunas1 = ("ID", "Nome", "Preço", "Estoque")
+tabela_produtos = ttk.Treeview(
+    frame3,
+    columns=colunas1,
+    show="headings"
+)
+for coluna in colunas1:
+    tabela_produtos.heading(coluna, text=coluna)
+tabela_produtos.pack(fill=tk.BOTH, expand=True)
+
+# ==========================================
+# TABELA VENDAS
+# ==========================================
+frame4 = tk.LabelFrame(janela, text="Vendas")
+frame4.place(x=380, y=280, width=800, height=250)
+
+colunas2 = ("ID", "Produto", "Quantidade", "Preço", "Total", "Data")
+tabela_vendas = ttk.Treeview(
+    frame4,
+    columns=colunas2,
+    show="headings"
+)
+for coluna in colunas2:
+    tabela_vendas.heading(coluna, text=coluna)
+tabela_vendas.pack(fill=tk.BOTH, expand=True)
+
+# ==========================================
+# ESTATÍSTICAS
+# ==========================================
+frame5 = tk.LabelFrame(janela, text="Estatísticas")
+frame5.place(x=10, y=550, width=1170, height=120)
+
+label_estatisticas = tk.Label(
+    frame5,
+    text="",
+    font=("Arial", 12),
+    justify="left"
+)
+label_estatisticas.pack(anchor="w", padx=10, pady=10)
